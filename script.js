@@ -14,8 +14,14 @@
     "https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"
   ];
 
-  const MAX_ATTENDEES = 50;
+  const MAX_ATTENDEES = 150;
   const AUTO_ROTATE_SPEED = 0.12;
+  const REFRESH_INTERVAL_MS = 30000;
+
+  // Isi dengan URL Web App dari Google Apps Script (doGet) yang mengembalikan
+  // [{ name, message }] dari Google Sheet.
+  const GUESTBOOK_DATA_URL =
+    "https://script.google.com/macros/s/AKfycbzh4TS1I41RnHn5NFmEGXO7jzdgQbBxF0USHKswwe32H_r7c1OkM7RDztCsXtmcuo17Tg/exec";
 
   const $status = () => document.getElementById("forest-status");
 
@@ -62,9 +68,6 @@
   function init3D() {
     const container = document.getElementById("canvas-container");
     const attendeeCountElement = document.getElementById("attendee-count");
-    const nameInput = document.getElementById("name-input");
-    const messageInput = document.getElementById("message-input");
-    const sendButton = document.getElementById("send-btn");
 
     if (!container) return;
 
@@ -343,25 +346,40 @@
       }
     }
 
-    // ---------- Form ----------
-    function handleSend() {
-      addAttendee(
-        (nameInput && nameInput.value) || "",
-        (messageInput && messageInput.value) || ""
-      );
-      if (messageInput) messageInput.value = "";
-      if (nameInput) nameInput.focus();
+    // ---------- Load dari Google Sheet (Apps Script doGet) ----------
+    const refreshButton = document.getElementById("refresh-btn");
+    let refreshTimer = null;
+
+    async function loadAttendees() {
+      if (!GUESTBOOK_DATA_URL || GUESTBOOK_DATA_URL.indexOf("XXXX") !== -1) {
+        setStatus("GUESTBOOK_DATA_URL belum diisi di script.js", true);
+        return;
+      }
+      if (refreshButton) refreshButton.classList.add("loading");
+      try {
+        const response = await fetch(
+          GUESTBOOK_DATA_URL + "?t=" + Date.now(),
+          { cache: "no-store" }
+        );
+        if (!response.ok) throw new Error("HTTP " + response.status);
+        const data = await response.json();
+        if (Array.isArray(data)) {
+          for (let i = 0; i < data.length; i++) {
+            addAttendee(data[i].name, data[i].message);
+          }
+        }
+      } catch (err) {
+        setStatus("Gagal memuat pesan dari Google Sheet: " + err.message, true);
+      } finally {
+        if (refreshButton) refreshButton.classList.remove("loading");
+      }
     }
 
-    if (sendButton) sendButton.addEventListener("click", handleSend);
-    if (messageInput) {
-      messageInput.addEventListener("keydown", (e) => {
-        if (e.key === "Enter" && !e.shiftKey) {
-          e.preventDefault();
-          handleSend();
-        }
-      });
-    }
+    if (refreshButton) refreshButton.addEventListener("click", loadAttendees);
+
+    // Muat awal + auto-refresh berkala
+    setTimeout(loadAttendees, 500);
+    refreshTimer = setInterval(loadAttendees, REFRESH_INTERVAL_MS);
 
     // ---------- Camera Controls (drag + scroll) ----------
     let yaw = 0;
@@ -448,11 +466,6 @@
       camera.updateProjectionMatrix();
       renderer.setSize(window.innerWidth, window.innerHeight);
     });
-
-    // ---------- Demo Attendees ----------
-    setTimeout(() => addAttendee("Maya", "Excited to be here!"), 800);
-    setTimeout(() => addAttendee("Budi", "Greetings from West Java!"), 1600);
-    setTimeout(() => addAttendee("Siti", "Love the forest setup!"), 2400);
 
     animate();
   }

@@ -18,32 +18,15 @@
 
   <div id="forest-status" class="status hidden">Loading 3D engine...</div>
 
-  <div class="counter">
-    Attendees in Forest:
-    <span id="attendee-count">0</span>
-  </div>
+  <div class="toolbar">
 
-  <div id="form-panel">
+    <div class="counter">
+      Pesan masuk:
+      <span id="attendee-count">0</span>
+    </div>
 
-    <h3>Isi Pesanmu</h3>
-
-    <input
-      type="text"
-      id="name-input"
-      placeholder="Name"
-      maxlength="18"
-      value="Samantha"
-    >
-
-    <textarea
-      id="message-input"
-      rows="2"
-      maxlength="120"
-      placeholder="Message..."
-    >Hello from the woods!</textarea>
-
-    <button id="send-btn">
-      Send Message
+    <button id="refresh-btn" title="Muat ulang pesan dari Google Sheet">
+      Refresh
     </button>
 
   </div>
