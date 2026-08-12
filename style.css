@@ -1,0 +1,256 @@
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+
+  font-family:
+    "Segoe UI",
+    Tahoma,
+    Geneva,
+    Verdana,
+    sans-serif;
+
+  background-color: #1a1a1a;
+}
+
+/* =========================
+   THREE.JS CANVAS
+========================= */
+
+#canvas-container {
+  position: fixed;
+  inset: 0;
+
+  width: 100vw;
+  height: 100vh;
+
+  display: block;
+}
+
+#canvas-container canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  cursor: grab;
+  touch-action: none;
+}
+
+#canvas-container canvas:active {
+  cursor: grabbing;
+}
+
+/* =========================
+   COUNTER
+========================= */
+
+.counter {
+  position: absolute;
+
+  top: 20px;
+  left: 20px;
+
+  background: #000;
+  color: #fff;
+
+  padding: 8px 16px;
+
+  font-weight: bold;
+  font-size: 14px;
+
+  border-radius: 20px;
+
+  box-shadow:
+    0 4px 6px rgba(0, 0, 0, 0.3);
+
+  z-index: 10;
+}
+
+/* =========================
+   FORM PANEL
+========================= */
+
+#form-panel {
+  position: absolute;
+
+  bottom: 20px;
+  left: 20px;
+
+  width: min(320px, calc(100vw - 40px));
+
+  background: rgba(255, 255, 255, 0.9);
+
+  border: 3px solid #000;
+  border-radius: 8px;
+
+  padding: 15px;
+
+  box-shadow: 5px 5px 0 #000;
+
+  z-index: 10;
+}
+
+#form-panel h3 {
+  margin: 0 0 10px;
+
+  font-size: 16px;
+
+  text-transform: uppercase;
+
+  letter-spacing: 1px;
+}
+
+#form-panel input,
+#form-panel textarea {
+  width: 100%;
+
+  padding: 8px;
+
+  margin-bottom: 8px;
+
+  border: 2px solid #000;
+  border-radius: 4px;
+
+  font-family: inherit;
+
+  resize: none;
+}
+
+#form-panel button {
+  width: 100%;
+
+  padding: 10px;
+
+  background: #ffde59;
+
+  border: 2px solid #000;
+
+  font-weight: bold;
+
+  cursor: pointer;
+
+  box-shadow: 2px 2px 0 #000;
+
+  transition:
+    transform 0.1s ease,
+    box-shadow 0.1s ease;
+}
+
+#form-panel button:hover {
+  transform: translate(-1px, -1px);
+
+  box-shadow: 3px 3px 0 #000;
+}
+
+#form-panel button:active {
+  transform: translate(2px, 2px);
+
+  box-shadow: 0 0 0 #000;
+}
+
+/* =========================
+   STATUS / ERROR BOX
+========================= */
+
+.status {
+  position: absolute;
+
+  top: 50%;
+  left: 50%;
+
+  transform: translate(-50%, -50%);
+
+  color: #fff;
+
+  font-weight: bold;
+  font-size: 14px;
+
+  text-align: center;
+
+  max-width: 80vw;
+
+  padding: 14px 20px;
+
+  border-radius: 8px;
+
+  background: rgba(0, 0, 0, 0.6);
+
+  z-index: 20;
+}
+
+.status.error {
+  color: #ff8a80;
+}
+
+/* =========================
+   HINT
+========================= */
+
+.hint {
+  position: absolute;
+
+  bottom: 20px;
+  right: 20px;
+
+  color: #fff;
+
+  background: rgba(0, 0, 0, 0.5);
+
+  padding: 6px 14px;
+
+  border-radius: 16px;
+
+  font-size: 12px;
+
+  z-index: 10;
+
+  pointer-events: none;
+
+  user-select: none;
+}
+
+/* =========================
+   UTILS
+========================= */
+
+.hidden {
+  display: none;
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 600px) {
+
+  .counter {
+    top: 10px;
+    left: 10px;
+
+    font-size: 12px;
+    padding: 7px 12px;
+  }
+
+  #form-panel {
+    bottom: 10px;
+    left: 10px;
+
+    width: calc(100vw - 20px);
+
+    padding: 12px;
+  }
+
+  .hint {
+    display: none;
+  }
+
+}

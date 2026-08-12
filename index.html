@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>3D Comic Forest with Interactive Attendees</title>
+
+  <link rel="stylesheet" href="style.css">
+
+  <!-- Three.js dimuat secara dinamis oleh script.js dengan multi-CDN fallback -->
+  <script src="script.js" defer></script>
+</head>
+
+<body>
+
+  <div id="canvas-container"></div>
+
+  <div id="forest-status" class="status hidden">Loading 3D engine...</div>
+
+  <div class="counter">
+    Attendees in Forest:
+    <span id="attendee-count">0</span>
+  </div>
+
+  <div id="form-panel">
+
+    <h3>Isi Pesanmu</h3>
+
+    <input
+      type="text"
+      id="name-input"
+      placeholder="Name"
+      maxlength="18"
+      value="Samantha"
+    >
+
+    <textarea
+      id="message-input"
+      rows="2"
+      maxlength="120"
+      placeholder="Message..."
+    >Hello from the woods!</textarea>
+
+    <button id="send-btn">
+      Send Message
+    </button>
+
+  </div>
+
+  <div class="hint">Drag untuk melihat &middot; Scroll untuk zoom</div>
+
+</body>
+</html>
