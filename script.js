@@ -16,12 +16,12 @@
 
   const MAX_ATTENDEES = 150;
   const AUTO_ROTATE_SPEED = 0.12;
-  const REFRESH_INTERVAL_MS = 30000;
+  const REFRESH_INTERVAL_MS = 10000;
 
   // Isi dengan URL Web App dari Google Apps Script (doGet) yang mengembalikan
   // [{ name, message }] dari Google Sheet.
   const GUESTBOOK_DATA_URL =
-    "https://script.google.com/macros/s/AKfycbzh4TS1I41RnHn5NFmEGXO7jzdgQbBxF0USHKswwe32H_r7c1OkM7RDztCsXtmcuo17Tg/exec";
+    "https://script.google.com/macros/s/AKfycbwyzofpessWCv3_34xZ2Df4XHYrj77vtVrGL1Q5PxUKv9noociGzr1kUQ4__og-ZknTcw/exec";
 
   const $status = () => document.getElementById("forest-status");
 
@@ -350,7 +350,7 @@
     const refreshButton = document.getElementById("refresh-btn");
     let refreshTimer = null;
 
-    async function loadAttendees() {
+    async function loadAttendees(retriesLeft = 2) {
       if (!GUESTBOOK_DATA_URL || GUESTBOOK_DATA_URL.indexOf("XXXX") !== -1) {
         setStatus("GUESTBOOK_DATA_URL belum diisi di script.js", true);
         return;
@@ -369,6 +369,10 @@
           }
         }
       } catch (err) {
+        if (retriesLeft > 0) {
+          await new Promise((r) => setTimeout(r, 4000));
+          return loadAttendees(retriesLeft - 1);
+        }
         setStatus("Gagal memuat pesan dari Google Sheet: " + err.message, true);
       } finally {
         if (refreshButton) refreshButton.classList.remove("loading");
